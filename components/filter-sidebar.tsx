@@ -49,6 +49,17 @@ export function FilterSidebar() {
 
     const category = window.location.pathname.split('/').pop();
     router.push(`/category/${category}?${params.toString()}`);
+
+    // Wait for the page to load and then scroll
+    setTimeout(() => {
+      const professionalsSection = document.getElementById('professionals-section');
+      if (professionalsSection) {
+        window.scrollTo({
+          top: professionalsSection.offsetTop - 100, // Offset to show part of the second professional
+          behavior: 'smooth',
+        });
+      }
+    }, 300); // Adjust the timeout if needed to wait for the page to load
   };
 
   return (
