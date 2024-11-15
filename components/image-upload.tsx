@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { useCallback, useState } from "react";
-import { Upload, X } from "lucide-react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { useCallback, useState } from 'react';
+import { Upload, X, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { uploadImage } from '@/lib/upload-image';
+import { toast } from 'sonner';
 
 interface ImageUploadProps {
   value: string | string[];
@@ -12,13 +14,30 @@ interface ImageUploadProps {
   multiple?: boolean;
 }
 
-export function ImageUpload({
-  value,
-  onChange,
-  maxFiles = 1,
-  multiple = false,
-}: ImageUploadProps) {
+export function ImageUpload({ value, onChange, maxFiles = 1, multiple = false }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFiles = async (files: File[]) => {
+    try {
+      setIsUploading(true);
+      const uploadPromises = files.map((file) => uploadImage(file));
+      const urls = await Promise.all(uploadPromises);
+
+      if (multiple) {
+        const currentUrls = Array.isArray(value) ? value : [];
+        const newUrls = [...currentUrls, ...urls].slice(0, maxFiles);
+        onChange(newUrls);
+      } else {
+        onChange(urls[0]);
+      }
+    } catch (error) {
+      toast.error('Failed to upload image(s)');
+      console.error('Upload error:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -34,25 +53,11 @@ export function ImageUpload({
     [value]
   );
 
-  const handleFiles = (files: File[]) => {
-    // In a real app, you would upload these files to a storage service
-    // For demo purposes, we'll create object URLs
-    const urls = files.map((file) => URL.createObjectURL(file));
-    
-    if (multiple) {
-      const currentUrls = Array.isArray(value) ? value : [];
-      const newUrls = [...currentUrls, ...urls].slice(0, maxFiles);
-      onChange(newUrls);
-    } else {
-      onChange(urls[0]);
-    }
-  };
-
   const removeImage = (urlToRemove: string) => {
     if (multiple && Array.isArray(value)) {
       onChange(value.filter((url) => url !== urlToRemove));
     } else {
-      onChange("");
+      onChange('');
     }
   };
 
@@ -60,9 +65,9 @@ export function ImageUpload({
     <div className="space-y-4">
       <div
         className={cn(
-          "border-2 border-dashed rounded-lg p-4 text-center hover:bg-accent transition-colors",
-          dragActive && "border-primary bg-accent",
-          "cursor-pointer"
+          'border-2 border-dashed rounded-lg p-4 text-center hover:bg-accent transition-colors',
+          dragActive && 'border-primary bg-accent',
+          'cursor-pointer'
         )}
         onDragOver={(e) => {
           e.preventDefault();
@@ -71,10 +76,11 @@ export function ImageUpload({
         onDragLeave={() => setDragActive(false)}
         onDrop={onDrop}
         onClick={() => {
-          const input = document.createElement("input");
-          input.type = "file";
+          if (isUploading) return;
+          const input = document.createElement('input');
+          input.type = 'file';
           input.multiple = multiple;
-          input.accept = "image/*";
+          input.accept = 'image/*';
           input.onchange = (e) => {
             const files = Array.from((e.target as HTMLInputElement).files || []);
             handleFiles(files);
@@ -83,10 +89,17 @@ export function ImageUpload({
         }}
       >
         <div className="flex flex-col items-center gap-2">
-          <Upload className="h-8 w-8 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
-            Drag & drop or click to upload
-          </p>
+          {isUploading ? (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Uploading...</p>
+            </>
+          ) : (
+            <>
+              <Upload className="h-8 w-8 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Drag & drop or click to upload</p>
+            </>
+          )}
         </div>
       </div>
 
@@ -94,12 +107,7 @@ export function ImageUpload({
         {multiple && Array.isArray(value)
           ? value.map((url) => (
               <div key={url} className="relative aspect-square">
-                <Image
-                  src={url}
-                  alt="Uploaded image"
-                  className="object-cover rounded-lg"
-                  fill
-                />
+                <Image src={url} alt="Uploaded image" className="object-cover rounded-lg" fill />
                 <button
                   type="button"
                   onClick={(e) => {
@@ -112,14 +120,10 @@ export function ImageUpload({
                 </button>
               </div>
             ))
-          : !multiple && value && (
+          : !multiple &&
+            value && (
               <div className="relative aspect-square">
-                <Image
-                  src={value}
-                  alt="Uploaded image"
-                  className="object-cover rounded-lg"
-                  fill
-                />
+                <Image src={value} alt="Uploaded image" className="object-cover rounded-lg" fill />
                 <button
                   type="button"
                   onClick={(e) => {
