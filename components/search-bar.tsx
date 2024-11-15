@@ -1,38 +1,38 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Search, MapPin } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, MapPin } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-const cities = [
-  "Bucharest",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Brașov",
-];
+const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța', 'Brașov'];
 
-const categories = [
-  "Plumber",
-  "Electrician",
-  "Carpenter",
-  "Painter",
-  "Mason",
-  "Locksmith",
-];
+const categories = ['Plumber', 'Electrician', 'Carpenter', 'Painter', 'Mason', 'Locksmith'];
 
 export function SearchBar() {
-  const [city, setCity] = useState("");
-  const [category, setCategory] = useState("");
+  const router = useRouter();
+  const [city, setCity] = useState('');
+  const [category, setCategory] = useState('');
+  const [search, setSearch] = useState('');
+
+  const handleSearch = () => {
+    if (category) {
+      const searchParams = new URLSearchParams();
+      if (city) searchParams.set('city', city);
+      if (search) searchParams.set('search', search);
+
+      const queryString = searchParams.toString();
+      router.push(`/category/${category.toLowerCase()}${queryString ? `?${queryString}` : ''}`);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-12">
@@ -68,8 +68,11 @@ export function SearchBar() {
           <Input
             placeholder="Search professionals..."
             className="flex-1"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
-          <Button>
+          <Button onClick={handleSearch}>
             <Search className="h-4 w-4" />
             <span className="ml-2">Search</span>
           </Button>

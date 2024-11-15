@@ -1,30 +1,55 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+} from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 
-const cities = [
-  "Bucharest",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Brașov",
-];
+const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța', 'Brașov'];
 
 export function FilterSidebar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [minRating, setMinRating] = useState([4]);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState('');
+  const [searchName, setSearchName] = useState('');
+
+  // Initialize filters from URL params
+  useEffect(() => {
+    const city = searchParams.get('city');
+    const rating = searchParams.get('rating');
+    const search = searchParams.get('search');
+
+    if (city) setSelectedCity(city);
+    if (rating) setMinRating([parseFloat(rating)]);
+    if (search) setSearchName(search);
+  }, [searchParams]);
+
+  const handleApplyFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (selectedCity) params.set('city', selectedCity);
+    else params.delete('city');
+
+    if (minRating[0] !== 4) params.set('rating', minRating[0].toString());
+    else params.delete('rating');
+
+    if (searchName) params.set('search', searchName);
+    else params.delete('search');
+
+    const category = window.location.pathname.split('/').pop();
+    router.push(`/category/${category}?${params.toString()}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -56,17 +81,21 @@ export function FilterSidebar() {
               step={0.5}
               className="mt-2"
             />
-            <span className="text-sm text-muted-foreground">
-              {minRating} stars and above
-            </span>
+            <span className="text-sm text-muted-foreground">{minRating} stars and above</span>
           </div>
 
           <div className="space-y-2">
             <Label>Search by Name</Label>
-            <Input placeholder="Search professionals..." />
+            <Input
+              placeholder="Search professionals..."
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+            />
           </div>
 
-          <Button className="w-full">Apply Filters</Button>
+          <Button className="w-full" onClick={handleApplyFilters}>
+            Apply Filters
+          </Button>
         </div>
       </div>
     </div>
