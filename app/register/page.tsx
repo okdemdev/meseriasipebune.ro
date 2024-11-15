@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/select';
 import { ImageUpload } from '@/components/image-upload';
 import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -41,6 +42,7 @@ const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța',
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -176,7 +178,19 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Profile Image</FormLabel>
                   <FormControl>
-                    <ImageUpload value={field.value} onChange={field.onChange} maxFiles={1} />
+                    {isUploading ? (
+                      <Skeleton className="w-full h-32" />
+                    ) : (
+                      <ImageUpload
+                        value={field.value}
+                        onChange={(value) => {
+                          setIsUploading(true);
+                          field.onChange(value);
+                          setIsUploading(false);
+                        }}
+                        maxFiles={1}
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -190,19 +204,32 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Work Images</FormLabel>
                   <FormControl>
-                    <ImageUpload
-                      value={field.value}
-                      onChange={field.onChange}
-                      maxFiles={5}
-                      multiple
-                    />
+                    {isUploading ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <Skeleton className="w-full h-32" />
+                        <Skeleton className="w-full h-32" />
+                        <Skeleton className="w-full h-32" />
+                        <Skeleton className="w-full h-32" />
+                      </div>
+                    ) : (
+                      <ImageUpload
+                        value={field.value}
+                        onChange={(value) => {
+                          setIsUploading(true);
+                          field.onChange(value);
+                          setIsUploading(false);
+                        }}
+                        maxFiles={5}
+                        multiple
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || isUploading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? 'Registering...' : 'Register'}
             </Button>
