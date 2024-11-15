@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Upload, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { ArrowLeft, Upload, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -14,43 +15,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ImageUpload } from "@/components/image-upload";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { ImageUpload } from '@/components/image-upload';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  category: z.string().min(1, "Please select a category"),
-  city: z.string().min(1, "Please select a city"),
-  whatsapp: z.string().min(10, "Please enter a valid WhatsApp number"),
-  profileImage: z.string().min(1, "Profile image is required"),
-  workImages: z.array(z.string()).min(1, "At least one work image is required"),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  category: z.string().min(1, 'Please select a category'),
+  city: z.string().min(1, 'Please select a city'),
+  whatsapp: z.string().min(10, 'Please enter a valid WhatsApp number'),
+  profileImage: z.string().min(1, 'Profile image is required'),
+  workImages: z.array(z.string()).min(1, 'At least one work image is required'),
 });
 
-const categories = [
-  "Plumber",
-  "Electrician",
-  "Carpenter",
-  "Painter",
-  "Mason",
-  "Locksmith",
-];
+const categories = ['Plumber', 'Electrician', 'Carpenter', 'Painter', 'Mason', 'Locksmith'];
 
-const cities = [
-  "Bucharest",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Brașov",
-];
+const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța', 'Brașov'];
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,11 +45,11 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      category: "",
-      city: "",
-      whatsapp: "",
-      profileImage: "",
+      name: '',
+      category: '',
+      city: '',
+      whatsapp: '',
+      profileImage: '',
       workImages: [],
     },
   });
@@ -70,18 +57,18 @@ export default function RegisterPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/professionals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/professionals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
 
-      if (!response.ok) throw new Error("Registration failed");
+      if (!response.ok) throw new Error('Registration failed');
 
-      toast.success("Registration successful!");
+      toast.success('Registration successful!');
       form.reset();
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -89,6 +76,11 @@ export default function RegisterPage() {
 
   return (
     <div className="container max-w-2xl mx-auto py-12 px-4">
+      <Link href="/">
+        <Button variant="ghost" size="sm" className="mb-6">
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+        </Button>
+      </Link>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Register as Professional</h1>
@@ -119,10 +111,7 @@ export default function RegisterPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select your profession" />
@@ -130,10 +119,7 @@ export default function RegisterPage() {
                     </FormControl>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem
-                          key={category}
-                          value={category.toLowerCase()}
-                        >
+                        <SelectItem key={category} value={category.toLowerCase()}>
                           {category}
                         </SelectItem>
                       ))}
@@ -150,10 +136,7 @@ export default function RegisterPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>City</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select your city" />
@@ -161,10 +144,7 @@ export default function RegisterPage() {
                     </FormControl>
                     <SelectContent>
                       {cities.map((city) => (
-                        <SelectItem
-                          key={city}
-                          value={city.toLowerCase()}
-                        >
+                        <SelectItem key={city} value={city.toLowerCase()}>
                           {city}
                         </SelectItem>
                       ))}
@@ -182,11 +162,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>WhatsApp Number</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="+40 123 456 789"
-                      type="tel"
-                      {...field}
-                    />
+                    <Input placeholder="+40 123 456 789" type="tel" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,11 +176,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Profile Image</FormLabel>
                   <FormControl>
-                    <ImageUpload
-                      value={field.value}
-                      onChange={field.onChange}
-                      maxFiles={1}
-                    />
+                    <ImageUpload value={field.value} onChange={field.onChange} maxFiles={1} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -232,7 +204,7 @@ export default function RegisterPage() {
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Registering..." : "Register"}
+              {isLoading ? 'Registering...' : 'Register'}
             </Button>
           </form>
         </Form>

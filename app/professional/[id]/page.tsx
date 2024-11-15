@@ -1,6 +1,9 @@
-import { notFound } from "next/navigation";
-import { ProfessionalProfile } from "@/components/professional-profile";
-import { RatingSection } from "@/components/rating-section";
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ProfessionalProfile } from '@/components/professional-profile';
+import { RatingSection } from '@/components/rating-section';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 async function getProfessional(id: string) {
   try {
@@ -14,19 +17,20 @@ async function getProfessional(id: string) {
   }
 }
 
-export default async function ProfessionalPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ProfessionalPage({ params }: { params: { id: string } }) {
   const professional = await getProfessional(params.id);
-  
+
   if (!professional) {
     notFound();
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Link href={`/category/${professional.category}`}>
+        <Button variant="ghost" size="sm" className="mb-6">
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to {professional.category}
+        </Button>
+      </Link>
       <ProfessionalProfile professional={professional} />
       <RatingSection professionalId={params.id} />
     </div>

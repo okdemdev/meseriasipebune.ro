@@ -12,11 +12,7 @@ export const metadata: Metadata = {
   description: 'Find skilled professionals for your home improvement needs',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
@@ -26,9 +22,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen bg-background">
+          <div className="flex flex-col min-h-screen bg-background">
             <Navbar />
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
             <Toaster />
           </div>
         </ThemeProvider>
