@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -28,6 +29,8 @@ import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(2, 'Name must be at least 2 characters'),
   category: z.string().min(1, 'Please select a category'),
   city: z.string().min(1, 'Please select a city'),
@@ -37,16 +40,18 @@ const formSchema = z.object({
 });
 
 const categories = ['Plumber', 'Electrician', 'Carpenter', 'Painter', 'Mason', 'Locksmith'];
-
 const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța', 'Brașov'];
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: '',
+      password: '',
       name: '',
       category: '',
       city: '',
@@ -68,7 +73,8 @@ export default function RegisterPage() {
       if (!response.ok) throw new Error('Registration failed');
 
       toast.success('Registration successful!');
-      form.reset();
+      // Force a hard navigation to ensure middleware runs
+      window.location.href = '/profile';
     } catch (error) {
       toast.error('Something went wrong. Please try again.');
     } finally {
@@ -93,6 +99,34 @@ export default function RegisterPage() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="your@email.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Create a password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="name"

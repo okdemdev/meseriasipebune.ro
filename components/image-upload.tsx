@@ -121,6 +121,7 @@ export function ImageUpload({ value, onChange, maxFiles = 1, multiple = false }:
               </div>
             ))
           : !multiple &&
+            typeof value === 'string' &&
             value && (
               <div className="relative aspect-square">
                 <Image src={value} alt="Uploaded image" className="object-cover rounded-lg" fill />
@@ -128,7 +129,7 @@ export function ImageUpload({ value, onChange, maxFiles = 1, multiple = false }:
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    removeImage(value as string);
+                    removeImage(value);
                   }}
                   className="absolute top-2 right-2 p-1 rounded-full bg-foreground/80 text-background hover:bg-foreground"
                 >
