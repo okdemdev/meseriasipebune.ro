@@ -2,6 +2,9 @@ import { CategoryHeader } from '@/components/category-header';
 import { FilterSidebar } from '@/components/filter-sidebar';
 import { ProfessionalCard } from '@/components/professional-card';
 import { normalizeCategory } from '@/lib/utils';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 async function getProfessionals(category: string, searchParams: URLSearchParams) {
   try {
@@ -33,6 +36,11 @@ export default async function CategoryPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Link href="/">
+        <Button variant="ghost" size="sm" className="mb-6">
+          <ArrowLeft className="mr-2 h-4 w-4" /> Înapoi la Categorii
+        </Button>
+      </Link>
       <CategoryHeader category={normalizedCategory} />
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-1">

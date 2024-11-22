@@ -29,7 +29,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { Loader2, PencilIcon, X } from 'lucide-react';
+import { Loader2, PencilIcon, X, ArrowLeft } from 'lucide-react';
 import { CATEGORIES, CITIES } from '@/lib/constants';
 
 const formSchema = z.object({
@@ -173,7 +173,7 @@ export default function ProfilePage() {
     <div className="container max-w-4xl mx-auto px-4 py-8">
       <div className="flex justify-end mb-6">
         <Button onClick={() => router.push('/my-profile')} variant="outline">
-          Vezi Profilul Public
+          <ArrowLeft className="mr-2 h-4 w-4" /> Înapoi la Profilul Public
         </Button>
       </div>
       <Card>

@@ -4,6 +4,7 @@ import { ProfessionalProfile } from '@/components/professional-profile';
 import { RatingSection } from '@/components/rating-section';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { slugifyCategory } from '@/lib/utils';
 
 async function getProfessional(id: string) {
   try {
@@ -26,9 +27,9 @@ export default async function ProfessionalPage({ params }: { params: { id: strin
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link href={`/category/${professional.category}`}>
+      <Link href={`/categories/${slugifyCategory(professional.category)}`}>
         <Button variant="ghost" size="sm" className="mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to {professional.category}
+          <ArrowLeft className="mr-2 h-4 w-4" /> Înapoi la {professional.category}
         </Button>
       </Link>
       <ProfessionalProfile professional={professional} />
