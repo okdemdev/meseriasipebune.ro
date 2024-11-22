@@ -170,7 +170,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container max-w-4xl mx-auto px-4 py-8">
+      <div className="flex justify-end mb-6">
+        <Button onClick={() => router.push('/my-profile')} variant="outline">
+          View Public Profile
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Profile Settings</CardTitle>

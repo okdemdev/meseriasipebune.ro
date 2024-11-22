@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,7 +27,7 @@ import {
 } from '@/components/ui/select';
 import { ImageUpload } from '@/components/image-upload';
 import { toast } from 'sonner';
-import { Skeleton } from '@/components/ui/skeleton';
+import { CATEGORIES, CITIES } from '@/lib/constants';
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -37,14 +38,12 @@ const formSchema = z.object({
   whatsapp: z.string().min(10, 'Please enter a valid WhatsApp number'),
   profileImage: z.string().min(1, 'Profile image is required'),
   workImages: z.array(z.string()).min(1, 'At least one work image is required'),
+  categories: z.array(z.string()),
+  cities: z.array(z.string()),
 });
-
-const categories = ['Plumber', 'Electrician', 'Carpenter', 'Painter', 'Mason', 'Locksmith'];
-const cities = ['Bucharest', 'Cluj-Napoca', 'Timișoara', 'Iași', 'Constanța', 'Brașov'];
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,29 +57,36 @@ export default function RegisterPage() {
       whatsapp: '',
       profileImage: '',
       workImages: [],
+      categories: [],
+      cities: [],
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
+      values.categories = [values.category, ...values.categories];
+      values.cities = [values.city, ...values.cities];
+
       const response = await fetch('/api/professionals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
 
-      if (!response.ok) throw new Error('Registration failed');
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Registration failed');
+      }
 
       toast.success('Registration successful!');
-      // Force a hard navigation to ensure middleware runs
       window.location.href = '/profile';
     } catch (error) {
-      toast.error('Something went wrong. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="container max-w-2xl mx-auto py-12 px-4">
@@ -99,6 +105,40 @@ export default function RegisterPage() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="profileImage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profile Image</FormLabel>
+                  <FormControl>
+                    <ImageUpload value={field.value} onChange={field.onChange} maxFiles={1} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="workImages"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Work Portfolio</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value}
+                      onChange={field.onChange}
+                      maxFiles={5}
+                      multiple
+                    />
+                  </FormControl>
+                  <FormDescription>Add up to 5 images of your best work</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="email"
@@ -154,7 +194,7 @@ export default function RegisterPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map((category) => (
+                      {CATEGORIES.map((category) => (
                         <SelectItem key={category} value={category.toLowerCase()}>
                           {category}
                         </SelectItem>
@@ -179,7 +219,7 @@ export default function RegisterPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {cities.map((city) => (
+                      {CITIES.map((city) => (
                         <SelectItem key={city} value={city.toLowerCase()}>
                           {city}
                         </SelectItem>
@@ -205,70 +245,19 @@ export default function RegisterPage() {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="profileImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Profile Image</FormLabel>
-                  <FormControl>
-                    {isUploading ? (
-                      <Skeleton className="w-full h-32" />
-                    ) : (
-                      <ImageUpload
-                        value={field.value}
-                        onChange={(value) => {
-                          setIsUploading(true);
-                          field.onChange(value);
-                          setIsUploading(false);
-                        }}
-                        maxFiles={1}
-                      />
-                    )}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="workImages"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Work Images</FormLabel>
-                  <FormControl>
-                    {isUploading ? (
-                      <div className="grid grid-cols-2 gap-4">
-                        <Skeleton className="w-full h-32" />
-                        <Skeleton className="w-full h-32" />
-                        <Skeleton className="w-full h-32" />
-                        <Skeleton className="w-full h-32" />
-                      </div>
-                    ) : (
-                      <ImageUpload
-                        value={field.value}
-                        onChange={(value) => {
-                          setIsUploading(true);
-                          field.onChange(value);
-                          setIsUploading(false);
-                        }}
-                        maxFiles={5}
-                        multiple
-                      />
-                    )}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full" disabled={isLoading || isUploading}>
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? 'Registering...' : 'Register'}
             </Button>
           </form>
         </Form>
+
+        <div className="text-center text-sm text-muted-foreground">
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary hover:underline">
+            Login here
+          </Link>
+        </div>
       </div>
     </div>
   );

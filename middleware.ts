@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protected routes - require authentication
-  const protectedPaths = ['/profile', '/api/profile'];
+  const protectedPaths = ['/profile', '/api/profile', '/my-profile'];
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
 
   // Auth routes - only for non-authenticated users
@@ -46,5 +46,5 @@ export async function middleware(request: NextRequest) {
 
 // Configure which paths the middleware should run on
 export const config = {
-  matcher: ['/profile/:path*', '/api/profile/:path*', '/login', '/register'],
+  matcher: ['/profile/:path*', '/api/profile/:path*', '/my-profile/:path*', '/login', '/register'],
 };

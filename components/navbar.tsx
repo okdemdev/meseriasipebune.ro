@@ -28,10 +28,10 @@ export function Navbar() {
         // Add cache control to prevent stale responses
         cache: 'no-store',
         headers: {
-          'Cache-Control': 'no-cache'
-        }
+          'Cache-Control': 'no-cache',
+        },
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setIsLoggedIn(true);
@@ -49,7 +49,7 @@ export function Navbar() {
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -98,10 +98,10 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <Link href="/profile">
+                <Link href="/my-profile">
                   <Button variant="ghost" className="flex items-center space-x-2">
                     <User className="h-5 w-5" />
-                    <span>Profile</span>
+                    <span>My Profile</span>
                   </Button>
                 </Link>
                 <Button variant="outline" onClick={handleLogout}>
@@ -139,10 +139,13 @@ export function Navbar() {
           <div className="md:hidden py-4">
             {isLoggedIn ? (
               <>
-                <Link href="/profile">
-                  <Button variant="ghost" className="w-full mb-2 flex items-center justify-center space-x-2">
+                <Link href="/my-profile">
+                  <Button
+                    variant="ghost"
+                    className="w-full mb-2 flex items-center justify-center space-x-2"
+                  >
                     <User className="h-5 w-5" />
-                    <span>Profile</span>
+                    <span>My Profile</span>
                   </Button>
                 </Link>
                 <Button variant="outline" className="w-full mb-2" onClick={handleLogout}>
