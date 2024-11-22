@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StarRating } from '@/components/star-rating';
-import { MapPin, Phone, Calendar, PencilIcon } from 'lucide-react';
+import { MapPin, Phone, Calendar, PencilIcon, Eye, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -23,10 +23,20 @@ export function ProfessionalProfile({
   const [workImagesLoaded, setWorkImagesLoaded] = useState<boolean[]>(
     new Array(professional.workImages?.length || 0).fill(false)
   );
+  const [showNumber, setShowNumber] = useState(false);
   const router = useRouter();
 
   const handleContact = () => {
     window.open(`https://wa.me/${professional.whatsapp}`, '_blank');
+  };
+
+  const formatPhoneNumber = (number: string) => {
+    // Remove any non-digit characters
+    const cleaned = number.replace(/\D/g, '');
+    // Format as: +40 XXX XXX XXX
+    return `+${cleaned.slice(0, 2)} ${cleaned.slice(2, 5)} ${cleaned.slice(5, 8)} ${cleaned.slice(
+      8
+    )}`;
   };
 
   const handleWorkImageLoad = (index: number) => {
@@ -107,10 +117,20 @@ export function ProfessionalProfile({
       <div>
         <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">Contact</h2>
-          <Button onClick={handleContact} className="w-full">
-            <Phone className="h-4 w-4 mr-2" />
-            Contact via WhatsApp
-          </Button>
+          <div className="space-y-3">
+            <Button
+              variant="outline"
+              className="w-full flex items-center justify-center gap-2"
+              onClick={() => setShowNumber(!showNumber)}
+            >
+              {showNumber ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showNumber ? formatPhoneNumber(professional.whatsapp) : 'Show Number'}
+            </Button>
+            <Button onClick={handleContact} className="w-full">
+              <Phone className="h-4 w-4 mr-2" />
+              Contact via WhatsApp
+            </Button>
+          </div>
         </Card>
       </div>
     </div>
