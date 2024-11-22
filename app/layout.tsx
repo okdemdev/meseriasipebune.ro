@@ -8,13 +8,14 @@ import { Toaster } from '@/components/ui/sonner';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Meseriasi Marketplace',
-  description: 'Find skilled professionals for your home improvement needs',
+  title: 'Meseriași - Găsește Profesioniști pentru Casa Ta',
+  description:
+    'Platformă pentru găsirea meșterilor și profesioniștilor calificați pentru lucrări și reparații în casă',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ro" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

@@ -92,12 +92,14 @@ export function ImageUpload({ value, onChange, maxFiles = 1, multiple = false }:
           {isUploading ? (
             <>
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">Uploading...</p>
+              <p className="text-sm text-muted-foreground">Se încarcă...</p>
             </>
           ) : (
             <>
               <Upload className="h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">Drag & drop or click to upload</p>
+              <p className="text-sm text-muted-foreground">
+                Trage și plasează sau click pentru încărcare
+              </p>
             </>
           )}
         </div>

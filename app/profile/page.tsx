@@ -33,14 +33,14 @@ import { Loader2, PencilIcon, X } from 'lucide-react';
 import { CATEGORIES, CITIES } from '@/lib/constants';
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, 'Numele trebuie să aibă cel puțin 2 caractere'),
   bio: z.string().optional(),
-  whatsapp: z.string().min(10, 'WhatsApp number must be at least 10 characters'),
-  category: z.string().min(1, 'Main category is required'),
-  categories: z.array(z.string()).min(1, 'At least one category is required'),
-  city: z.string().min(1, 'Main city is required'),
-  cities: z.array(z.string()).min(1, 'At least one city is required'),
-  profileImage: z.string().min(1, 'Profile image is required'),
+  whatsapp: z.string().min(10, 'Numărul de WhatsApp trebuie să aibă cel puțin 10 caractere'),
+  category: z.string().min(1, 'Categoria principală este obligatorie'),
+  categories: z.array(z.string()).min(1, 'Cel puțin o categorie este necesară'),
+  city: z.string().min(1, 'Orașul principal este obligatoriu'),
+  cities: z.array(z.string()).min(1, 'Cel puțin un oraș este necesar'),
+  profileImage: z.string().min(1, 'Imaginea de profil este obligatorie'),
   workImages: z.array(z.string()),
 });
 
@@ -173,13 +173,13 @@ export default function ProfilePage() {
     <div className="container max-w-4xl mx-auto px-4 py-8">
       <div className="flex justify-end mb-6">
         <Button onClick={() => router.push('/my-profile')} variant="outline">
-          View Public Profile
+          Vezi Profilul Public
         </Button>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Profile Settings</CardTitle>
-          <CardDescription>Manage your professional profile information</CardDescription>
+          <CardTitle>Setări Profil</CardTitle>
+          <CardDescription>Gestionează informațiile profilului tău profesional</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -189,7 +189,7 @@ export default function ProfilePage() {
                 name="profileImage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Profile Image</FormLabel>
+                    <FormLabel>Poză de Profil</FormLabel>
                     <FormControl>
                       <ImageUpload value={field.value} onChange={field.onChange} maxFiles={1} />
                     </FormControl>
@@ -203,9 +203,9 @@ export default function ProfilePage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nume</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your name" {...field} />
+                      <Input placeholder="Numele tău" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -217,10 +217,10 @@ export default function ProfilePage() {
                 name="bio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bio</FormLabel>
+                    <FormLabel>Descriere</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell clients about yourself and your work..."
+                        placeholder="Spune-le clienților despre tine și serviciile tale..."
                         {...field}
                       />
                     </FormControl>
@@ -234,7 +234,7 @@ export default function ProfilePage() {
                 name="whatsapp"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>WhatsApp Number</FormLabel>
+                    <FormLabel>Număr WhatsApp</FormLabel>
                     <FormControl>
                       <Input placeholder="+40 123 456 789" {...field} />
                     </FormControl>
@@ -248,11 +248,11 @@ export default function ProfilePage() {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Main Category</FormLabel>
+                    <FormLabel>Categoria Principală</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select your main category" />
+                          <SelectValue placeholder="Selectează categoria principală" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -273,11 +273,11 @@ export default function ProfilePage() {
                 name="categories"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Additional Categories</FormLabel>
+                    <FormLabel>Categorii Adiționale</FormLabel>
                     <Select onValueChange={(value) => handleAddCategory(value)}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Add more categories" />
+                          <SelectValue placeholder="Adaugă mai multe categorii" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -312,11 +312,11 @@ export default function ProfilePage() {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Main City</FormLabel>
+                    <FormLabel>Orașul Principal</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select your main city" />
+                          <SelectValue placeholder="Selectează orașul principal" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -337,11 +337,11 @@ export default function ProfilePage() {
                 name="cities"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Additional Cities</FormLabel>
+                    <FormLabel>Orașe Adiționale</FormLabel>
                     <Select onValueChange={(value) => handleAddCity(value)}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Add more cities" />
+                          <SelectValue placeholder="Adaugă mai multe orașe" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -378,7 +378,7 @@ export default function ProfilePage() {
                 name="workImages"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Work Portfolio</FormLabel>
+                    <FormLabel>Portofoliu de Lucrări</FormLabel>
                     <FormControl>
                       <ImageUpload
                         value={field.value}
@@ -387,7 +387,9 @@ export default function ProfilePage() {
                         multiple
                       />
                     </FormControl>
-                    <FormDescription>Add up to 5 images of your best work</FormDescription>
+                    <FormDescription>
+                      Adaugă până la 5 imagini cu cele mai bune lucrări
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -396,7 +398,7 @@ export default function ProfilePage() {
               <div className="flex justify-end">
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  {isSubmitting ? 'Se salvează...' : 'Salvează Modificările'}
                 </Button>
               </div>
             </form>

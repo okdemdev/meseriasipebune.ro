@@ -70,7 +70,7 @@ export function Navbar() {
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
               <Wrench className="h-6 w-6" />
-              <span className="text-xl font-bold">Meseriasi</span>
+              <span className="text-xl font-bold">Meseriași</span>
             </Link>
             <Button
               variant="ghost"
@@ -92,7 +92,7 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <Wrench className="h-6 w-6" />
-            <span className="text-xl font-bold">Meseriasi</span>
+            <span className="text-xl font-bold">Meseriași</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -101,20 +101,20 @@ export function Navbar() {
                 <Link href="/my-profile">
                   <Button variant="ghost" className="flex items-center space-x-2">
                     <User className="h-5 w-5" />
-                    <span>My Profile</span>
+                    <span>Profilul Meu</span>
                   </Button>
                 </Link>
                 <Button variant="outline" onClick={handleLogout}>
-                  Logout
+                  Deconectare
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost">Login</Button>
+                  <Button variant="ghost">Conectare</Button>
                 </Link>
                 <Link href="/register">
-                  <Button variant="outline">Register as Professional</Button>
+                  <Button variant="outline">Înregistrare ca Meseriaș</Button>
                 </Link>
               </>
             )}
@@ -145,23 +145,23 @@ export function Navbar() {
                     className="w-full mb-2 flex items-center justify-center space-x-2"
                   >
                     <User className="h-5 w-5" />
-                    <span>My Profile</span>
+                    <span>Profilul Meu</span>
                   </Button>
                 </Link>
                 <Button variant="outline" className="w-full mb-2" onClick={handleLogout}>
-                  Logout
+                  Deconectare
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
                   <Button variant="ghost" className="w-full mb-2">
-                    Login
+                    Conectare
                   </Button>
                 </Link>
                 <Link href="/register">
                   <Button variant="outline" className="w-full mb-2">
-                    Register as Professional
+                    Înregistrare ca Meseriaș
                   </Button>
                 </Link>
               </>

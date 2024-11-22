@@ -38,7 +38,7 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
             </div>
             <div className="flex items-center text-sm text-muted-foreground">
               <MapPin className="h-4 w-4 mr-1" />
-              {professional.city}
+              <span className="capitalize">{professional.city}</span>
             </div>
           </div>
         </CardContent>

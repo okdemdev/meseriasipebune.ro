@@ -1,14 +1,14 @@
 export const CATEGORIES = [
-  'Plumber',
+  'Instalator',
   'Electrician',
-  'Carpenter',
-  'Painter',
-  'Mason',
-  'Locksmith',
+  'Tâmplar',
+  'Zugrav',
+  'Zidar',
+  'Lăcătuș',
 ] as const;
 
 export const CITIES = [
-  'Bucharest',
+  'București',
   'Cluj-Napoca',
   'Timișoara',
   'Iași',

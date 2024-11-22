@@ -76,7 +76,7 @@ export function ProfessionalProfile({
                 </div>
                 <div className="flex items-center mt-2 text-muted-foreground">
                   <Calendar className="h-4 w-4 mr-2" />
-                  Member since {format(new Date(professional.createdAt), 'MMMM yyyy')}
+                  Membru din {format(new Date(professional.createdAt), 'MMMM yyyy')}
                 </div>
               </div>
             </div>
@@ -88,20 +88,20 @@ export function ProfessionalProfile({
                 className="ml-4"
               >
                 <PencilIcon className="h-4 w-4 mr-2" />
-                Edit Profile
+                Editează Profilul
               </Button>
             )}
           </div>
 
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Work Gallery</h2>
+            <h2 className="text-xl font-semibold mb-4">Portofoliu de Lucrări</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {professional.workImages.map((image: string, index: number) => (
                 <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
                   {!workImagesLoaded[index] && <Skeleton className="absolute inset-0" />}
                   <Image
                     src={image}
-                    alt={`Work sample ${index + 1}`}
+                    alt={`Exemplu lucrare ${index + 1}`}
                     fill
                     className="object-cover"
                     onLoad={() => handleWorkImageLoad(index)}
@@ -124,11 +124,11 @@ export function ProfessionalProfile({
               onClick={() => setShowNumber(!showNumber)}
             >
               {showNumber ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              {showNumber ? formatPhoneNumber(professional.whatsapp) : 'Show Number'}
+              {showNumber ? formatPhoneNumber(professional.whatsapp) : 'Arată Numărul'}
             </Button>
             <Button onClick={handleContact} className="w-full">
               <Phone className="h-4 w-4 mr-2" />
-              Contact via WhatsApp
+              Contactează prin WhatsApp
             </Button>
           </div>
         </Card>

@@ -20,8 +20,8 @@ import {
 import { toast } from 'sonner';
 
 const formSchema = z.object({
-  email: z.string().email('Please enter a valid email'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Te rugăm să introduci o adresă de email validă'),
+  password: z.string().min(1, 'Parola este obligatorie'),
 });
 
 export default function LoginPage() {
@@ -44,25 +44,25 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Important for cookies
+        credentials: 'include',
         body: JSON.stringify(values),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Conectarea a eșuat');
       }
 
-      toast.success('Logged in successfully');
-      
+      toast.success('Conectare reușită!');
+
       // Small delay to ensure cookie is set
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Force a full page reload to update auth state
-      window.location.href = '/profile';
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Redirect to public profile instead of edit page
+      window.location.href = '/my-profile';
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Something went wrong');
+      toast.error(error instanceof Error ? error.message : 'Ceva nu a mers bine');
     } finally {
       setIsLoading(false);
     }
@@ -75,13 +75,15 @@ export default function LoginPage() {
         className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Home
+        Înapoi la Pagina Principală
       </Link>
 
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Professional Login</h1>
-          <p className="text-muted-foreground">Welcome back! Please login to your account</p>
+          <h1 className="text-3xl font-bold">Conectare Meseriaș</h1>
+          <p className="text-muted-foreground">
+            Bine ai revenit! Te rugăm să te conectezi la contul tău
+          </p>
         </div>
 
         <Form {...form}>
@@ -93,7 +95,7 @@ export default function LoginPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="Introdu emailul tău" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,9 +107,9 @@ export default function LoginPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Parolă</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter your password" {...field} />
+                    <Input type="password" placeholder="Introdu parola ta" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,15 +117,15 @@ export default function LoginPage() {
             />
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Se conectează...' : 'Conectare'}
             </Button>
           </form>
         </Form>
 
         <div className="text-center text-sm text-muted-foreground">
-          Don't have an account?{' '}
+          Nu ai cont încă?{' '}
           <Link href="/register" className="text-primary hover:underline">
-            Register here
+            Înregistrează-te aici
           </Link>
         </div>
       </div>

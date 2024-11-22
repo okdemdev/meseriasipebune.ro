@@ -30,14 +30,14 @@ import { toast } from 'sonner';
 import { CATEGORIES, CITIES } from '@/lib/constants';
 
 const formSchema = z.object({
-  email: z.string().email('Please enter a valid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  category: z.string().min(1, 'Please select a category'),
-  city: z.string().min(1, 'Please select a city'),
-  whatsapp: z.string().min(10, 'Please enter a valid WhatsApp number'),
-  profileImage: z.string().min(1, 'Profile image is required'),
-  workImages: z.array(z.string()).min(1, 'At least one work image is required'),
+  email: z.string().email('Te rugăm să introduci o adresă de email validă'),
+  password: z.string().min(6, 'Parola trebuie să aibă cel puțin 6 caractere'),
+  name: z.string().min(2, 'Numele trebuie să aibă cel puțin 2 caractere'),
+  category: z.string().min(1, 'Te rugăm să selectezi o categorie'),
+  city: z.string().min(1, 'Te rugăm să selectezi un oraș'),
+  whatsapp: z.string().min(10, 'Te rugăm să introduci un număr valid de WhatsApp'),
+  profileImage: z.string().min(1, 'Imaginea de profil este obligatorie'),
+  workImages: z.array(z.string()).min(1, 'Este necesară cel puțin o imagine cu lucrările tale'),
   categories: z.array(z.string()),
   cities: z.array(z.string()),
 });
@@ -76,13 +76,15 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Registration failed');
+        throw new Error(data.error || 'Înregistrarea a eșuat');
       }
 
-      toast.success('Registration successful!');
-      window.location.href = '/profile';
+      toast.success('Înregistrare reușită!');
+
+      // Redirect to public profile instead of edit page
+      window.location.href = '/my-profile';
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Something went wrong');
+      toast.error(error instanceof Error ? error.message : 'Ceva nu a mers bine');
     } finally {
       setIsLoading(false);
     }
@@ -92,14 +94,14 @@ export default function RegisterPage() {
     <div className="container max-w-2xl mx-auto py-12 px-4">
       <Link href="/">
         <Button variant="ghost" size="sm" className="mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
+          <ArrowLeft className="mr-2 h-4 w-4" /> Înapoi la Pagina Principală
         </Button>
       </Link>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Register as Professional</h1>
+          <h1 className="text-3xl font-bold">Înregistrare ca Meseriaș</h1>
           <p className="text-muted-foreground mt-2">
-            Create your profile and start receiving job requests.
+            Creează-ți profilul și începe să primești cereri de lucrări
           </p>
         </div>
 
@@ -110,7 +112,7 @@ export default function RegisterPage() {
               name="profileImage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Profile Image</FormLabel>
+                  <FormLabel>Poză de Profil</FormLabel>
                   <FormControl>
                     <ImageUpload value={field.value} onChange={field.onChange} maxFiles={1} />
                   </FormControl>
@@ -124,7 +126,7 @@ export default function RegisterPage() {
               name="workImages"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Work Portfolio</FormLabel>
+                  <FormLabel>Portofoliu de Lucrări</FormLabel>
                   <FormControl>
                     <ImageUpload
                       value={field.value}
@@ -133,7 +135,9 @@ export default function RegisterPage() {
                       multiple
                     />
                   </FormControl>
-                  <FormDescription>Add up to 5 images of your best work</FormDescription>
+                  <FormDescription>
+                    Adaugă până la 5 imagini cu cele mai bune lucrări ale tale
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -146,7 +150,7 @@ export default function RegisterPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="your@email.com" {...field} />
+                    <Input type="email" placeholder="email@exemplu.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -158,9 +162,9 @@ export default function RegisterPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Parolă</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Create a password" {...field} />
+                    <Input type="password" placeholder="Creează o parolă" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -172,9 +176,9 @@ export default function RegisterPage() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>Nume Complet</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Input placeholder="Numele tău complet" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -186,11 +190,11 @@ export default function RegisterPage() {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Categoria Principală</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your profession" />
+                        <SelectValue placeholder="Alege meseria ta" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -211,11 +215,11 @@ export default function RegisterPage() {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>Orașul Principal</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your city" />
+                        <SelectValue placeholder="Alege orașul tău" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -236,7 +240,7 @@ export default function RegisterPage() {
               name="whatsapp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>WhatsApp Number</FormLabel>
+                  <FormLabel>Număr WhatsApp</FormLabel>
                   <FormControl>
                     <Input placeholder="+40 123 456 789" type="tel" {...field} />
                   </FormControl>
@@ -247,15 +251,15 @@ export default function RegisterPage() {
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? 'Registering...' : 'Register'}
+              {isLoading ? 'Se creează contul...' : 'Creează Cont'}
             </Button>
           </form>
         </Form>
 
         <div className="text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
+          Ai deja un cont?{' '}
           <Link href="/login" className="text-primary hover:underline">
-            Login here
+            Conectează-te aici
           </Link>
         </div>
       </div>
