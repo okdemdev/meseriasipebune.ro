@@ -64,6 +64,10 @@ const professionalSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  isAvailable: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 // Hash password before saving

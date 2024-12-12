@@ -26,7 +26,7 @@ export default async function ProfessionalPage({ params }: { params: { id: strin
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
       <Link href={`/categories/${slugifyCategory(professional.category)}`}>
         <Button variant="ghost" size="sm" className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" /> Înapoi la {professional.category}

@@ -17,9 +17,9 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
 
   return (
     <Link href={`/professional/${professional._id}`}>
-      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg h-full">
         <CardContent className="p-0">
-          <div className="relative h-48">
+          <div className="relative h-40 sm:h-48">
             {!imageLoaded && <Skeleton className="absolute inset-0" />}
             <Image
               src={professional.profileImage}
@@ -30,8 +30,8 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
               style={{ opacity: imageLoaded ? 1 : 0 }}
             />
           </div>
-          <div className="p-4">
-            <h3 className="text-lg font-semibold mb-1">{professional.name}</h3>
+          <div className="p-3 sm:p-4">
+            <h3 className="text-base sm:text-lg font-semibold mb-1">{professional.name}</h3>
             <p className="text-sm text-muted-foreground mb-2 capitalize">{professional.category}</p>
             <div className="flex items-center mb-2">
               <StarRating rating={professional.rating} count={professional.ratingCount} />
