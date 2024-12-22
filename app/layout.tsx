@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: 'Meseriași - Găsește Profesioniști pentru Casa Ta',
   description:
     'Platformă pentru găsirea meșterilor și profesioniștilor calificați pentru lucrări și reparații în casă',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

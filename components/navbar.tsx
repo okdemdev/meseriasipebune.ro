@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sun, Moon, Wrench, Menu, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -69,8 +70,8 @@ export function Navbar() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <Wrench className="h-6 w-6" />
-              <span className="text-xl font-bold">Meseriași</span>
+              <Image src="/icon.png" alt="Logo" width={24} height={24} />
+              <span className="text-xl font-bold">Meseriași pe Bune</span>
             </Link>
             <Button
               variant="ghost"
@@ -91,8 +92,8 @@ export function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Wrench className="h-6 w-6" />
-            <span className="text-xl font-bold">Meseriași</span>
+            <Image src="/icon.png" alt="Logo" width={24} height={24} />
+            <span className="text-xl font-bold">Meseriași pe Bune</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-4">
