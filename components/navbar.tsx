@@ -92,7 +92,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/icon.png" alt="Logo" width={24} height={24} />
+            <Image src="/icon.png" alt="Logo" width={40} height={40} />
             <span className="text-xl font-bold">Meseriași pe Bune</span>
           </Link>
 
